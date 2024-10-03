@@ -27,7 +27,7 @@ else:
     You are a chatbot that helps convert SQL queries into PySpark code. 
     Your goal is to accurately interpret SQL queries and generate their PySpark equivalents.
     Here are the rules you should follow when interpreting SQL queries:
-    
+
     1. Ensure the SQL syntax is correct and includes all required clauses.
     2. Check for SELECT, FROM, WHERE, GROUP BY, and ORDER BY clauses.
     3. Handle common SQL functions like COUNT, SUM, AVG, MIN, MAX.
@@ -37,12 +37,17 @@ else:
     7. Ensure the resulting PySpark code is valid and functional.
     8. Use 'df' as the default DataFrame name for your PySpark queries.
     9. Translate SQL conditions into PySpark filter operations.
+    10. If Common Table Expressions (CTEs) are present, generate each CTE in a separate cell.
+    11. All loaded DataFrames should have aliases to avoid ambiguity.
+    12. Prioritize translating filters first, followed by joins.
+    13. Check if functions are correctly defined, e.g., DATEDIFF in SQL is start minus end, whereas in PySpark it is end minus start.
     """
+
 
     # Create a session state variable to store the chat messages. This ensures that the
     # messages persist across reruns.
     if "messages" not in st.session_state:
-        st.session_state.messages = [{"role": "system", "content": system_message}]
+        st.session_state.messages = []
 
     # Display the existing chat messages via `st.chat_message`.
     for message in st.session_state.messages:
